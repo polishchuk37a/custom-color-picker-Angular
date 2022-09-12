@@ -20,6 +20,16 @@ export class ColorPickerComponent {
     { colorCode: '#E67E22', colorName: 'yellow' },
     { colorCode: '#34495E', colorName: 'orange' },
     { colorCode: '#E74C3C', colorName: 'maroon' },
+    { colorCode: '#000000', colorName: 'black' },
+    { colorCode: '#F1C40F', colorName: 'blue' },
+    { colorCode: '#1ABC9C', colorName: 'aqua' },
+    { colorCode: '#2980B9', colorName: 'teal' },
+    { colorCode: '#9B59B6', colorName: 'olive' },
+    { colorCode: '#8E44AD', colorName: 'green' },
+    { colorCode: '#ECF0F1', colorName: 'lime' },
+    { colorCode: '#E67E22', colorName: 'yellow' },
+    { colorCode: '#34495E', colorName: 'orange' },
+    { colorCode: '#E74C3C', colorName: 'maroon' },
     { colorCode: '#000000', colorName: 'black' }
   ];
 

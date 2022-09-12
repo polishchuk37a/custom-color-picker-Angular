@@ -1,0 +1,24 @@
+.color-picker-dropdown {
+  position: absolute;
+  box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
+  height: auto;
+  padding: 10px;
+
+  .color-picker-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-column-gap: 15px;
+    grid-row-gap: 15px;
+
+
+    .color-to-pick {
+      width: 20px;
+      height: 20px;
+
+      &.picked {
+        box-shadow: rgba(60, 64, 67, 0.5) 0 1px 2px 0, rgba(60, 64, 67, 0.5) 0 2px 6px 2px;
+        transform: scale(1.2);
+      }
+    }
+  }
+}

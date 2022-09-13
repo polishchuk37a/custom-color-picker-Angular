@@ -1,14 +1,22 @@
-import {Component} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
 import {Color} from "../../interfaces/color";
+import {fromEvent, Subject} from "rxjs";
+import {filter, takeUntil, tap} from "rxjs/operators";
 
 @Component({
   selector: 'app-color-picker',
   templateUrl: './color-picker.component.html',
   styleUrls: ['./color-picker.component.scss']
 })
-export class ColorPickerComponent {
-  isColorPickerDropdownOpen = false;
+export class ColorPickerComponent implements AfterViewInit, OnDestroy {
   color = '#000000';
+
+  isColorPickerDropdownOpen = false;
+  isSelectFocused = false;
+
+  @ViewChild('select') select: ElementRef | undefined;
+
+  private unsubscribe$ = new Subject<void>();
 
   colorList: Color[] = [
     { colorCode: '#F1C40F', colorName: 'blue' },
@@ -42,5 +50,42 @@ export class ColorPickerComponent {
 
   setColorFromPicker(colorFromPicker: string): void {
      this.color = colorFromPicker;
+  }
+
+  ngAfterViewInit(): void {
+    fromEvent<MouseEvent>(this.select?.nativeElement, 'click')
+      .pipe(
+        tap(() => {
+          this.select?.nativeElement.focus();
+          this.isSelectFocused = true;
+        }),
+        takeUntil(this.unsubscribe$)
+      ).subscribe();
+
+    fromEvent<KeyboardEvent>(this.select?.nativeElement, 'keydown')
+      .pipe(
+        filter((event: KeyboardEvent) => event.key === 'Tab'),
+        tap(() => {
+          this.select?.nativeElement.focus();
+          this.isSelectFocused = true;
+        }),
+        takeUntil(this.unsubscribe$)
+      ).subscribe();
+
+    fromEvent<KeyboardEvent>(window, 'keydown')
+      .pipe(
+        filter((event: KeyboardEvent) => event.key === 'Enter'),
+        tap(() => {
+          if (this.isSelectFocused) {
+            this.isColorPickerDropdownOpen = !this.isColorPickerDropdownOpen;
+          }
+        }),
+        takeUntil(this.unsubscribe$)
+      ).subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

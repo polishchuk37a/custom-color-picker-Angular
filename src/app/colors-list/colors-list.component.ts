@@ -15,8 +15,6 @@ export class ColorsListComponent implements AfterViewInit, OnDestroy{
   @Input() colorList: Color[] = [];
   @Output() pickedColor = new EventEmitter<string>();
 
-  @ViewChild('color') selectedColorOnKey: ElementRef | undefined;
-
   private unsubscribe$ = new Subject<void>();
 
   constructor() { }

@@ -11,10 +11,6 @@ p {
     align-items: center;
     position: relative;
 
-    .pick-color-text {
-
-    }
-
     .picked-color {
       margin-left: 10px;
       width: 20px;
@@ -34,6 +30,20 @@ p {
       }
     }
   }
+
+  .color-type-error {
+    font-size: 12px;
+    color: firebrick;
+    display: flex;
+    justify-content: end;
+    margin-right: 5px;
+  }
+}
+
+.form-control-error {
+  border: 2px solid firebrick;
+  border-radius: 4px;
+  padding: 2px;
 }
 
 

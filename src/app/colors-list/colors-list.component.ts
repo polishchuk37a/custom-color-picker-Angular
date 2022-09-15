@@ -22,8 +22,8 @@ export class ColorsListComponent implements AfterViewInit, OnDestroy, ControlVal
 
   @Input() colorList: Color[] = [];
 
-  private onChange = (color: string) => {};
-  private onTouched = () => {};
+  private onChange: Function = (color: string) => {};
+  private onTouched: Function = () => {};
 
   private unsubscribe$ = new Subject<void>();
 
@@ -39,11 +39,11 @@ export class ColorsListComponent implements AfterViewInit, OnDestroy, ControlVal
     this.selectedColor = color;
   }
 
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: Function): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  registerOnTouched(fn: Function): void {
     this.onTouched = fn;
   }
 
@@ -96,16 +96,6 @@ export class ColorsListComponent implements AfterViewInit, OnDestroy, ControlVal
           } else {
             this.pickedColorIndex -= 5;
           }
-        }),
-        takeUntil(this.unsubscribe$),
-      ).subscribe();
-
-    fromEvent<KeyboardEvent>(window, 'keydown')
-      .pipe(
-        filter((event: KeyboardEvent) => event.key === 'Enter'),
-        tap(() => {
-          this.selectedColor = this.colorList[this.pickedColorIndex].colorCode;
-          this.onChange(this.selectedColor);
         }),
         takeUntil(this.unsubscribe$),
       ).subscribe();

@@ -2,7 +2,7 @@ import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from
 import {Color} from "../../interfaces/color";
 import {fromEvent, Subject} from "rxjs";
 import {filter, takeUntil, tap} from "rxjs/operators";
-import {FormBuilder} from "@angular/forms";
+import {FormBuilder, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-color-picker',
@@ -18,7 +18,7 @@ export class ColorPickerComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('select') select: ElementRef | undefined;
 
   colorForm = this.formBuilder.group({
-    color: ['']
+    color: ['', Validators.pattern(/^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/)]
   });
 
   private unsubscribe$ = new Subject<void>();
@@ -42,9 +42,13 @@ export class ColorPickerComponent implements OnInit, AfterViewInit, OnDestroy {
     { colorCode: '#ECF0F1', colorName: 'lime' },
     { colorCode: '#E67E22', colorName: 'yellow' },
     { colorCode: '#34495E', colorName: 'orange' },
-    { colorCode: '#E74C3C', colorName: 'maroon' },
+    { colorCode: '1234', colorName: 'maroon' },
     { colorCode: '#000000', colorName: 'black' }
   ];
+
+  get isFormControlHasError(): boolean | undefined {
+    return this.colorForm.get('color')?.hasError('pattern');
+  }
 
   constructor(private readonly formBuilder: FormBuilder) {
   }

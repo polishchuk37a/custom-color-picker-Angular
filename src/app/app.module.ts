@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { ColorPickerComponent } from './color-picker/color-picker.component';
 import { ColorsListComponent } from './colors-list/colors-list.component';
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -11,9 +12,10 @@ import { ColorsListComponent } from './colors-list/colors-list.component';
     ColorPickerComponent,
     ColorsListComponent
   ],
-  imports: [
-    BrowserModule
-  ],
+    imports: [
+        BrowserModule,
+        ReactiveFormsModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

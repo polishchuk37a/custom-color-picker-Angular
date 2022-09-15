@@ -9,5 +9,11 @@
     </p>
   </div>
 
-  <app-colors-list *ngIf="isColorPickerDropdownOpen" [colorList]="colorList" (pickedColor)="setColorFromPicker($event)"></app-colors-list>
+  <form [formGroup]="colorForm">
+    <app-colors-list
+      formControlName="color"
+      *ngIf="isColorPickerDropdownOpen"
+      [colorList]="colorList"
+    ></app-colors-list>
+  </form>
 </div>

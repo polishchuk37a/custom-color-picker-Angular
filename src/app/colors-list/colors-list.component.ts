@@ -2,18 +2,28 @@ import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, Ou
 import {Color} from "../../interfaces/color";
 import {fromEvent, Subject} from "rxjs";
 import {filter, takeUntil, tap} from "rxjs/operators";
+import {ControlValueAccessor, NG_VALUE_ACCESSOR} from "@angular/forms";
 
 @Component({
   selector: 'app-colors-list',
   templateUrl: './colors-list.component.html',
-  styleUrls: ['./colors-list.component.scss']
+  styleUrls: ['./colors-list.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: ColorsListComponent,
+      multi: true
+    }
+  ]
 })
-export class ColorsListComponent implements AfterViewInit, OnDestroy{
-  selectedColor = '';
+export class ColorsListComponent implements AfterViewInit, OnDestroy, ControlValueAccessor {
+  selectedColor = '#000000';
   pickedColorIndex = -1;
 
   @Input() colorList: Color[] = [];
-  @Output() pickedColor = new EventEmitter<string>();
+
+  private onChange = (color: string) => {};
+  private onTouched = () => {};
 
   private unsubscribe$ = new Subject<void>();
 
@@ -22,7 +32,19 @@ export class ColorsListComponent implements AfterViewInit, OnDestroy{
   getColorFromPicker(colorIndex: number): void {
     this.pickedColorIndex = colorIndex;
     this.selectedColor = this.colorList[colorIndex].colorCode;
-    this.pickedColor.emit(this.selectedColor);
+    this.onChange(this.selectedColor);
+  }
+
+  writeValue(color: string): void {
+    this.selectedColor = color;
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
   }
 
   ngAfterViewInit(): void {
@@ -83,7 +105,7 @@ export class ColorsListComponent implements AfterViewInit, OnDestroy{
         filter((event: KeyboardEvent) => event.key === 'Enter'),
         tap(() => {
           this.selectedColor = this.colorList[this.pickedColorIndex].colorCode;
-          this.pickedColor.emit(this.selectedColor);
+          this.onChange(this.selectedColor);
         }),
         takeUntil(this.unsubscribe$),
       ).subscribe();

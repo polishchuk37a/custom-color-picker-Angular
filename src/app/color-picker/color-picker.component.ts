@@ -1,20 +1,25 @@
-import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Color} from "../../interfaces/color";
 import {fromEvent, Subject} from "rxjs";
 import {filter, takeUntil, tap} from "rxjs/operators";
+import {FormBuilder} from "@angular/forms";
 
 @Component({
   selector: 'app-color-picker',
   templateUrl: './color-picker.component.html',
   styleUrls: ['./color-picker.component.scss']
 })
-export class ColorPickerComponent implements AfterViewInit, OnDestroy {
+export class ColorPickerComponent implements OnInit, AfterViewInit, OnDestroy {
   color = '#000000';
 
   isColorPickerDropdownOpen = false;
   isSelectFocused = false;
 
   @ViewChild('select') select: ElementRef | undefined;
+
+  colorForm = this.formBuilder.group({
+    color: ['']
+  });
 
   private unsubscribe$ = new Subject<void>();
 
@@ -41,15 +46,19 @@ export class ColorPickerComponent implements AfterViewInit, OnDestroy {
     { colorCode: '#000000', colorName: 'black' }
   ];
 
-  constructor() {
+  constructor(private readonly formBuilder: FormBuilder) {
+  }
+
+  ngOnInit(): void {
+    this.colorForm.get('color')?.valueChanges
+      .pipe(
+        tap(value => this.color = value),
+        takeUntil(this.unsubscribe$)
+      ).subscribe();
   }
 
   openColorPickerDropdown(): void {
     this.isColorPickerDropdownOpen = !this.isColorPickerDropdownOpen;
-  }
-
-  setColorFromPicker(colorFromPicker: string): void {
-     this.color = colorFromPicker;
   }
 
   ngAfterViewInit(): void {

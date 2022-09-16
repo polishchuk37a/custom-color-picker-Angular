@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild} from '@angular/core';
 import {Color} from "../../interfaces/color";
 import {fromEvent, Subject} from "rxjs";
 import {filter, takeUntil, tap} from "rxjs/operators";
@@ -25,35 +25,13 @@ export class ColorPickerComponent implements AfterViewInit, OnDestroy, ControlVa
   isColorPickerDropdownOpen = false;
   isSelectFocused = false;
 
-  @ViewChild('select') select: ElementRef | undefined;
+  @Input() colorList: Color[];
+  @ViewChild('select') select: ElementRef;
 
   private onChange: Function = (color: string) => {};
   private onTouched: Function = () => {};
 
   private unsubscribe$ = new Subject<void>();
-
-  colorList: Color[] = [
-    { code: '#F1C40F', name: 'blue' },
-    { code: '#1ABC9C', name: 'aqua' },
-    { code: '#2980B9', name: 'teal' },
-    { code: '#9B59B6', name: 'olive' },
-    { code: '#8E44AD', name: 'green' },
-    { code: '#ECF0F1', name: 'lime' },
-    { code: '#E67E22', name: 'yellow' },
-    { code: '#34495E', name: 'orange' },
-    { code: '#E74C3C', name: 'maroon' },
-    { code: '#000000', name: 'black' },
-    { code: '#F1C40F', name: 'blue' },
-    { code: '#1ABC9C', name: 'aqua' },
-    { code: '#2980B9', name: 'teal' },
-    { code: '#9B59B6', name: 'olive' },
-    { code: '#8E44AD', name: 'green' },
-    { code: '#ECF0F1', name: 'lime' },
-    { code: '#E67E22', name: 'yellow' },
-    { code: '#34495E', name: 'orange' },
-    { code: '11111', name: 'maroon' },
-    { code: '#000000', name: 'black' }
-  ];
 
   constructor() {
   }

@@ -1,4 +1,29 @@
 .main-container {
   width: 100%;
   padding: 10px;
+
+  .color-picker-form {
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .error-message {
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto;
+
+    .invalid-form-message {
+      margin: 0;
+      display: flex;
+      justify-content: flex-end;
+      color: red;
+      font-size: 12px;
+    }
+  }
+
+  .invalidForm {
+    padding: 3px;
+    border: 1.5px solid red;
+  }
 }

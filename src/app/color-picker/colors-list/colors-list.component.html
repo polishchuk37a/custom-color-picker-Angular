@@ -3,7 +3,7 @@
     <div
       class="color-to-pick"
       *ngFor="let colors of colorList; let i = index"
-      [ngStyle]="{backgroundColor: colors.colorCode}"
+      [ngStyle]="{backgroundColor: colors.code}"
       [class.picked]="pickedColorIndex === i"
       (click)="getColorFromPicker(i)">
     </div>

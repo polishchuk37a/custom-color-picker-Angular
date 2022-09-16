@@ -1,5 +1,5 @@
 <div class="color-picker-container">
-  <div class="color-picker-info" tabindex="0" #select [ngClass]="{'form-control-error': isFormControlHasError}">
+  <div class="color-picker-info" tabindex="0" #select>
     <p class="pick-color-text">Picked color:</p>
 
     <div class="picked-color" [ngStyle]="{backgroundColor: color}"></div>
@@ -9,12 +9,9 @@
     </p>
   </div>
 
-  <form [formGroup]="colorForm">
-    <app-colors-list
-      formControlName="color"
-      *ngIf="isColorPickerDropdownOpen"
-      [colorList]="colorList"
-    ></app-colors-list>
-    <p class="color-type-error" *ngIf="isFormControlHasError">Invalid type of color</p>
-  </form>
+  <app-colors-list
+    *ngIf="isColorPickerDropdownOpen"
+    [colorList]="colorList"
+    (pickedColor)="setColorFromDropdown($event)"
+  ></app-colors-list>
 </div>

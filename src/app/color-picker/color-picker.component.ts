@@ -1,68 +1,97 @@
-import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
 import {Color} from "../../interfaces/color";
 import {fromEvent, Subject} from "rxjs";
 import {filter, takeUntil, tap} from "rxjs/operators";
-import {FormBuilder, Validators} from "@angular/forms";
+import {
+  AbstractControl,
+  ControlValueAccessor,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR, ValidationErrors,
+  Validator,
+} from "@angular/forms";
 
 @Component({
   selector: 'app-color-picker',
   templateUrl: './color-picker.component.html',
-  styleUrls: ['./color-picker.component.scss']
+  styleUrls: ['./color-picker.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: ColorPickerComponent,
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: ColorPickerComponent,
+      multi: true
+    }
+  ]
 })
-export class ColorPickerComponent implements OnInit, AfterViewInit, OnDestroy {
-  color = '#000000';
+export class ColorPickerComponent implements AfterViewInit, OnDestroy, ControlValueAccessor, Validator {
+  color = '';
 
   isColorPickerDropdownOpen = false;
   isSelectFocused = false;
 
   @ViewChild('select') select: ElementRef | undefined;
 
-  colorForm = this.formBuilder.group({
-    color: ['', Validators.pattern(/^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/)]
-  });
+  private onChange: Function = (color: string) => {};
+  private onTouched: Function = () => {};
 
   private unsubscribe$ = new Subject<void>();
 
   colorList: Color[] = [
-    { colorCode: '#F1C40F', colorName: 'blue' },
-    { colorCode: '#1ABC9C', colorName: 'aqua' },
-    { colorCode: '#2980B9', colorName: 'teal' },
-    { colorCode: '#9B59B6', colorName: 'olive' },
-    { colorCode: '#8E44AD', colorName: 'green' },
-    { colorCode: '#ECF0F1', colorName: 'lime' },
-    { colorCode: '#E67E22', colorName: 'yellow' },
-    { colorCode: '#34495E', colorName: 'orange' },
-    { colorCode: '#E74C3C', colorName: 'maroon' },
-    { colorCode: '#000000', colorName: 'black' },
-    { colorCode: '#F1C40F', colorName: 'blue' },
-    { colorCode: '#1ABC9C', colorName: 'aqua' },
-    { colorCode: '#2980B9', colorName: 'teal' },
-    { colorCode: '#9B59B6', colorName: 'olive' },
-    { colorCode: '#8E44AD', colorName: 'green' },
-    { colorCode: '#ECF0F1', colorName: 'lime' },
-    { colorCode: '#E67E22', colorName: 'yellow' },
-    { colorCode: '#34495E', colorName: 'orange' },
-    { colorCode: '1234', colorName: 'maroon' },
-    { colorCode: '#000000', colorName: 'black' }
+    { code: '#F1C40F', name: 'blue' },
+    { code: '#1ABC9C', name: 'aqua' },
+    { code: '#2980B9', name: 'teal' },
+    { code: '#9B59B6', name: 'olive' },
+    { code: '#8E44AD', name: 'green' },
+    { code: '#ECF0F1', name: 'lime' },
+    { code: '#E67E22', name: 'yellow' },
+    { code: '#34495E', name: 'orange' },
+    { code: '#E74C3C', name: 'maroon' },
+    { code: '#000000', name: 'black' },
+    { code: '#F1C40F', name: 'blue' },
+    { code: '#1ABC9C', name: 'aqua' },
+    { code: '#2980B9', name: 'teal' },
+    { code: '#9B59B6', name: 'olive' },
+    { code: '#8E44AD', name: 'green' },
+    { code: '#ECF0F1', name: 'lime' },
+    { code: '#E67E22', name: 'yellow' },
+    { code: '#34495E', name: 'orange' },
+    { code: '11111', name: 'maroon' },
+    { code: '#000000', name: 'black' }
   ];
 
-  get isFormControlHasError(): boolean | undefined {
-    return this.colorForm.get('color')?.hasError('pattern');
+  constructor() {
   }
 
-  constructor(private readonly formBuilder: FormBuilder) {
+  writeValue(color: string): void {
+    this.color = color;
   }
 
-  ngOnInit(): void {
-    this.colorForm.get('color')?.valueChanges
-      .pipe(
-        tap(value => this.color = value),
-        takeUntil(this.unsubscribe$)
-      ).subscribe();
+  registerOnChange(fn: Function): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: Function): void {
+    this.onTouched = fn;
   }
 
   openColorPickerDropdown(): void {
     this.isColorPickerDropdownOpen = !this.isColorPickerDropdownOpen;
+  }
+
+  setColorFromDropdown(color: string): void {
+    this.onChange(color);
+    this.color = color;
+  }
+
+  validate(control: AbstractControl): ValidationErrors | null {
+    let colorCode = control.value;
+    let regex = /^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/;
+
+    return colorCode.match(regex) ? null : { notHexCode: 'Invalid HEX code' };
   }
 
   ngAfterViewInit(): void {

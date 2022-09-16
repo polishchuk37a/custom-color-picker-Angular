@@ -1,3 +1,9 @@
 <div class="main-container">
-  <app-color-picker></app-color-picker>
+  <form class="color-picker-form" [formGroup]="colorForm" [ngClass]="{invalidForm: isFormInvalid}">
+    <app-color-picker formControlName="color"></app-color-picker>
+  </form>
+  <div class="error-message">
+    <p class="invalid-form-message" *ngIf="isFormInvalid">Invalid Hex code of color</p>
+  </div>
+
 </div>

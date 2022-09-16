@@ -1,29 +1,20 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild} from '@angular/core';
-import {Color} from "../../interfaces/color";
+import {AfterViewInit, Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
+import {Color} from "../../../interfaces/color";
 import {fromEvent, Subject} from "rxjs";
 import {filter, takeUntil, tap} from "rxjs/operators";
-import {ControlValueAccessor, NG_VALUE_ACCESSOR} from "@angular/forms";
 
 @Component({
   selector: 'app-colors-list',
   templateUrl: './colors-list.component.html',
   styleUrls: ['./colors-list.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: ColorsListComponent,
-      multi: true
-    }
-  ]
+
 })
-export class ColorsListComponent implements AfterViewInit, OnDestroy, ControlValueAccessor {
-  selectedColor = '#000000';
+export class ColorsListComponent implements AfterViewInit, OnDestroy {
+  selectedColor = '';
   pickedColorIndex = -1;
 
   @Input() colorList: Color[] = [];
-
-  private onChange: Function = (color: string) => {};
-  private onTouched: Function = () => {};
+  @Output() pickedColor = new EventEmitter<string>();
 
   private unsubscribe$ = new Subject<void>();
 
@@ -31,20 +22,8 @@ export class ColorsListComponent implements AfterViewInit, OnDestroy, ControlVal
 
   getColorFromPicker(colorIndex: number): void {
     this.pickedColorIndex = colorIndex;
-    this.selectedColor = this.colorList[colorIndex].colorCode;
-    this.onChange(this.selectedColor);
-  }
-
-  writeValue(color: string): void {
-    this.selectedColor = color;
-  }
-
-  registerOnChange(fn: Function): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: Function): void {
-    this.onTouched = fn;
+    this.selectedColor = this.colorList[colorIndex].code;
+    this.pickedColor.emit(this.selectedColor);
   }
 
   ngAfterViewInit(): void {

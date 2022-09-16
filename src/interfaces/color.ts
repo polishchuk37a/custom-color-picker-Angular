@@ -1,4 +1,4 @@
 export interface Color {
-  colorCode: string;
-  colorName: string;
+  code: string;
+  name: string;
 }

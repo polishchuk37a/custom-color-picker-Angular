@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {FormBuilder, ValidationErrors} from "@angular/forms";
+import {hexColorValidator} from "./shared/hexColorValidator";
 
 @Component({
   selector: 'app-root',
@@ -8,12 +9,8 @@ import {FormBuilder, ValidationErrors} from "@angular/forms";
 })
 export class AppComponent {
   colorForm = this.formBuilder.group({
-    color: ['#000000']
+    color: ['#000000', hexColorValidator]
   })
-
-  get isFormInvalid(): ValidationErrors | null | undefined{
-    return this.colorForm.get('color')?.errors;
-  }
 
   constructor(private readonly formBuilder: FormBuilder) {
   }

@@ -3,11 +3,8 @@ import {Color} from "../../interfaces/color";
 import {fromEvent, Subject} from "rxjs";
 import {filter, takeUntil, tap} from "rxjs/operators";
 import {
-  AbstractControl,
   ControlValueAccessor,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR, ValidationErrors,
-  Validator,
+  NG_VALUE_ACCESSOR,
 } from "@angular/forms";
 
 @Component({
@@ -19,15 +16,10 @@ import {
       provide: NG_VALUE_ACCESSOR,
       useExisting: ColorPickerComponent,
       multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: ColorPickerComponent,
-      multi: true
     }
   ]
 })
-export class ColorPickerComponent implements AfterViewInit, OnDestroy, ControlValueAccessor, Validator {
+export class ColorPickerComponent implements AfterViewInit, OnDestroy, ControlValueAccessor {
   color = '';
 
   isColorPickerDropdownOpen = false;
@@ -85,13 +77,7 @@ export class ColorPickerComponent implements AfterViewInit, OnDestroy, ControlVa
   setColorFromDropdown(color: string): void {
     this.onChange(color);
     this.color = color;
-  }
-
-  validate(control: AbstractControl): ValidationErrors | null {
-    let colorCode = control.value;
-    let regex = /^#+([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/;
-
-    return colorCode.match(regex) ? null : { notHexCode: 'Invalid HEX code' };
+    this.isColorPickerDropdownOpen = false;
   }
 
   ngAfterViewInit(): void {

@@ -1,9 +1,9 @@
 <div class="main-container">
-  <form class="color-picker-form" [formGroup]="colorForm" [ngClass]="{invalidForm: isFormInvalid}">
+  <form class="color-picker-form" [formGroup]="colorForm" [ngClass]="{invalidForm: colorForm.get('color')?.errors}">
     <app-color-picker formControlName="color"></app-color-picker>
   </form>
   <div class="error-message">
-    <p class="invalid-form-message" *ngIf="isFormInvalid">Invalid Hex code of color</p>
+    <p class="invalid-form-message" *ngIf="colorForm.get('color')?.errors">Invalid Hex code of color</p>
   </div>
 
 </div>

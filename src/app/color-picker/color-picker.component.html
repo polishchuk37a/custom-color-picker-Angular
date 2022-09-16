@@ -5,7 +5,7 @@
     <div class="picked-color" [ngStyle]="{backgroundColor: color}"></div>
 
     <p>
-      <i class="arrow" [ngClass]="{'clicked': isColorPickerDropdownOpen}" (click)="openColorPickerDropdown()"></i>
+      <i class="arrow" [class.clicked]="isColorPickerDropdownOpen" (click)="openColorPickerDropdown()"></i>
     </p>
   </div>
 

@@ -3,29 +3,6 @@ import {Color} from "../../../interfaces/color";
 import {fromEvent, Subject} from "rxjs";
 import {filter, takeUntil, tap} from "rxjs/operators";
 
-const DEFAULT_COLORS: Color[] = [
-  { code: '#F1C40F', name: 'blue' },
-  { code: '#1ABC9C', name: 'aqua' },
-  { code: '#2980B9', name: 'teal' },
-  { code: '#9B59B6', name: 'olive' },
-  { code: '#8E44AD', name: 'green' },
-  { code: '#ECF0F1', name: 'lime' },
-  { code: '#E67E22', name: 'yellow' },
-  { code: '#34495E', name: 'orange' },
-  { code: '#E74C3C', name: 'maroon' },
-  { code: '#000000', name: 'black' },
-  { code: '#F1C40F', name: 'blue' },
-  { code: '#1ABC9C', name: 'aqua' },
-  { code: '#2980B9', name: 'teal' },
-  { code: '#9B59B6', name: 'olive' },
-  { code: '#8E44AD', name: 'green' },
-  { code: '#ECF0F1', name: 'lime' },
-  { code: '#E67E22', name: 'yellow' },
-  { code: '#34495E', name: 'orange' },
-  { code: '11111', name: 'maroon' },
-  { code: '#000000', name: 'black' }
-]
-
 @Component({
   selector: 'app-colors-list',
   templateUrl: './colors-list.component.html',
@@ -41,15 +18,11 @@ export class ColorsListComponent implements AfterViewInit, OnDestroy {
 
   private unsubscribe$ = new Subject<void>();
 
-  get colorListSource(): Color[] {
-    return this.colorList.length > 0 ? this.colorList : DEFAULT_COLORS;
-  }
-
   constructor() { }
 
   getColorFromPicker(colorIndex: number): void {
     this.pickedColorIndex = colorIndex;
-    this.selectedColor = this.colorListSource[colorIndex].code;
+    this.selectedColor = this.colorList[colorIndex].code;
     this.pickedColor.emit(this.selectedColor);
   }
 

@@ -2,7 +2,7 @@
   <div class="color-picker-wrapper">
     <div
       class="color-to-pick"
-      *ngFor="let colors of colorListSource; let i = index"
+      *ngFor="let colors of colorList; let i = index"
       [ngStyle]="{backgroundColor: colors.code}"
       [class.picked]="pickedColorIndex === i"
       (click)="getColorFromPicker(i)">
